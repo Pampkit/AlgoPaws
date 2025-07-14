@@ -1,0 +1,19 @@
+<Window x:Class="AlgoPaws.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="AlgoPaws" Height="600" Width="800">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+
+		<StackPanel Orientation="Horizontal" Margin="10">
+            <ComboBox Name="ComboBox"/>
+            <Button Name="StartButton" Content="Старт" Width="100" Margin="5" Click="StartButton_Click"/>
+			<Button Name="GenerateButton" Content="Новый массив" Width="120" Margin="5" Click="GenerateButton_Click"/>
+		</StackPanel>
+
+		<Canvas Name="VisualizationCanvas" Grid.Row="1" Background="LightGray" Margin="10"/>
+	</Grid>
+</Window>
