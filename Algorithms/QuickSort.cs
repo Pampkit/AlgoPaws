@@ -1,10 +1,5 @@
 ﻿using AlgoPaws.Models;
-using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows;
-using System.Windows.Shapes;
-using System.Threading;
-using System.Windows.Media.Animation;
 
 namespace AlgoPaws.Algorithms
 {
@@ -15,6 +10,8 @@ namespace AlgoPaws.Algorithms
         public int defaultSpeed = 1000;
 
         public int coefSpeed = 1;
+
+        UIController controller = new UIController();
 
         public async Task Sort(List<NumberItem> items, int speed, CancellationToken cancellationToken)
         {
@@ -27,8 +24,8 @@ namespace AlgoPaws.Algorithms
         {
             int pivotIndex = (low + high) / 2;
             int pivot = items[pivotIndex].Value;
-            
-            ResetPivotHighlight(items);
+
+            controller.ResetPivotHighlight(items);
             items[pivotIndex].Rectangle.Fill = Brushes.Green;
 
             await Task.Delay(defaultSpeed / coefSpeed / 2);
@@ -56,13 +53,16 @@ namespace AlgoPaws.Algorithms
                     break;
                 }
 
-                Highlight(items, i, j);
-                Swap(items, i++, j--);
+                controller.Highlight(items, i);
+                controller.Highlight(items, j);
+
+                int duration = defaultSpeed / coefSpeed;
+                controller.Swap(items, i++, j--, duration);
 
                 await Task.Delay(defaultSpeed / coefSpeed / 2);
 
-                ResetHighlight(items, i - 1);
-                ResetHighlight(items, j + 1);
+                controller.ResetHighlight(items, i - 1);
+                controller.ResetHighlight(items, j + 1);
             }
             return j;
         }
@@ -74,57 +74,6 @@ namespace AlgoPaws.Algorithms
                 int pi = await Partition(items, low, high, cancellationToken);
                 await QuickSortAlgorithm(items, low, pi, cancellationToken);
                 await QuickSortAlgorithm(items, pi + 1, high, cancellationToken);
-            }
-        }
-
-        private void AnimateSwap(Rectangle rect, double toX)
-        {
-            var anim = new DoubleAnimation
-            {
-                To = toX,
-                Duration = TimeSpan.FromMilliseconds(defaultSpeed / coefSpeed / 2),
-                EasingFunction = new CubicEase { EasingMode = EasingMode.EaseInOut }
-            };
-            rect.BeginAnimation(Canvas.LeftProperty, anim);
-        }
-
-        private void Swap(List<NumberItem> items, int index1, int index2)
-        {
-            var item1 = items[index1];
-            var item2 = items[index2];
-
-            var rect1 = item1.Rectangle;
-            var rect2 = item2.Rectangle;
-
-            double toX1 = index2 * 20;
-            double toX2 = index1 * 20;
-
-            AnimateSwap(rect1, toX1);
-            AnimateSwap(rect2, toX2);
-
-            Task.Delay(defaultSpeed / coefSpeed);
-
-            items[index1] = item2;
-            items[index2] = item1;
-        }
-
-        private void Highlight(List<NumberItem> items, int index1, int index2)
-        {
-            items[index1].Rectangle.Fill = Brushes.Red;
-            items[index2].Rectangle.Fill = Brushes.Red;
-        }
-
-        private void ResetHighlight(List<NumberItem> items, int index)
-        {
-            items[index].Rectangle.Fill = Brushes.Blue;
-        }
-
-        private void ResetPivotHighlight(List<NumberItem> items)
-        {
-            foreach (var item in items)
-            {
-                if (item.Rectangle.Fill == Brushes.Green)
-                    item.Rectangle.Fill = Brushes.Blue;
             }
         }
     }
