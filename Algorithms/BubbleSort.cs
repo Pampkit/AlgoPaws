@@ -11,12 +11,17 @@ namespace AlgoPaws.Algorithms
     {
         public string Name => "Bubble Sort";
 
-        public async Task Sort(List<NumberItem> items, CancellationToken cancellationToken, int delay = 100)
+        public int defaultSpeed = 600;
+
+        public int coefSpeed = 1;
+
+        public async Task Sort(List<NumberItem> items, int speed, CancellationToken cancellationToken)
         {
-            await BubbleSortAlgorithm(items, cancellationToken, delay);
+            coefSpeed = speed;
+            await BubbleSortAlgorithm(items, cancellationToken);
         }
 
-        public async Task BubbleSortAlgorithm(List<NumberItem> items, CancellationToken cancellationToken, int delay = 1000)
+        public async Task BubbleSortAlgorithm(List<NumberItem> items, CancellationToken cancellationToken)
         {
             int n = items.Count;
             for (int i = 0; i < n - 1; i++)
@@ -31,7 +36,7 @@ namespace AlgoPaws.Algorithms
                         Swap(items, j, j + 1);
                     }
 
-                    await Task.Delay(600);
+                    await Task.Delay(defaultSpeed / coefSpeed);
 
                     ResetHighlight(items, j, j + 1);
                 }
@@ -63,7 +68,7 @@ namespace AlgoPaws.Algorithms
             AnimateSwap(rect1, toX1);
             AnimateSwap(rect2, toX2);
 
-            Task.Delay(600);
+            Task.Delay(defaultSpeed / coefSpeed);
 
             items[index1] = item2;
             items[index2] = item1;

@@ -12,10 +12,15 @@ namespace AlgoPaws.Algorithms
     {
         public string Name => "Quick Sort";
 
-        public async Task Sort(List<NumberItem> items, CancellationToken cancellationToken, int delay = 100)
+        public int defaultSpeed = 1000;
+
+        public int coefSpeed = 1;
+
+        public async Task Sort(List<NumberItem> items, int speed, CancellationToken cancellationToken)
         {
+            coefSpeed = speed;
             int n = items.Count;
-            await QuickSortAlgorithm(items, 0, n - 1, cancellationToken, delay);
+            await QuickSortAlgorithm(items, 0, n - 1, cancellationToken);
         }
 
         private async Task<int> Partition(List<NumberItem> items, int low, int high, CancellationToken cancellationToken)
@@ -26,7 +31,7 @@ namespace AlgoPaws.Algorithms
             ResetPivotHighlight(items);
             items[pivotIndex].Rectangle.Fill = Brushes.Green;
 
-            await Task.Delay(500);
+            await Task.Delay(defaultSpeed / coefSpeed / 2);
 
             int i = low;
             int j = high;
@@ -54,7 +59,7 @@ namespace AlgoPaws.Algorithms
                 Highlight(items, i, j);
                 Swap(items, i++, j--);
 
-                await Task.Delay(500);
+                await Task.Delay(defaultSpeed / coefSpeed / 2);
 
                 ResetHighlight(items, i - 1);
                 ResetHighlight(items, j + 1);
@@ -62,13 +67,13 @@ namespace AlgoPaws.Algorithms
             return j;
         }
 
-        public async Task QuickSortAlgorithm(List<NumberItem> items, int low, int high, CancellationToken cancellationToken, int delay = 100)
+        public async Task QuickSortAlgorithm(List<NumberItem> items, int low, int high, CancellationToken cancellationToken)
         {
             if (low < high) {
                 cancellationToken.ThrowIfCancellationRequested();
                 int pi = await Partition(items, low, high, cancellationToken);
-                await QuickSortAlgorithm(items, low, pi, cancellationToken, delay);
-                await QuickSortAlgorithm(items, pi + 1, high, cancellationToken, delay);
+                await QuickSortAlgorithm(items, low, pi, cancellationToken);
+                await QuickSortAlgorithm(items, pi + 1, high, cancellationToken);
             }
         }
 
@@ -77,7 +82,7 @@ namespace AlgoPaws.Algorithms
             var anim = new DoubleAnimation
             {
                 To = toX,
-                Duration = TimeSpan.FromMilliseconds(500),
+                Duration = TimeSpan.FromMilliseconds(defaultSpeed / coefSpeed / 2),
                 EasingFunction = new CubicEase { EasingMode = EasingMode.EaseInOut }
             };
             rect.BeginAnimation(Canvas.LeftProperty, anim);
@@ -97,7 +102,7 @@ namespace AlgoPaws.Algorithms
             AnimateSwap(rect1, toX1);
             AnimateSwap(rect2, toX2);
 
-            Task.Delay(1000);
+            Task.Delay(defaultSpeed / coefSpeed);
 
             items[index1] = item2;
             items[index2] = item1;

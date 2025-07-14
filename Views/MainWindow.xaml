@@ -12,6 +12,7 @@
             <ComboBox Name="ComboBox"/>
             <Button Name="StartButton" Content="Старт" Width="100" Margin="5" Click="StartButton_Click"/>
 			<Button Name="GenerateButton" Content="Новый массив" Width="120" Margin="5" Click="GenerateButton_Click"/>
+            <ComboBox Name="Speed"/>
 		</StackPanel>
 
 		<Canvas Name="VisualizationCanvas" Grid.Row="1" Background="LightGray" Margin="10"/>

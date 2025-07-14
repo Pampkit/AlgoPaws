@@ -11,6 +11,6 @@ namespace AlgoPaws.Algorithms
     internal interface ISortingAlgorithm
     {
         string Name { get; }
-        Task Sort(List<NumberItem> items, CancellationToken cancellationToken, int delay = 100);
+        Task Sort(List<NumberItem> items, int speed, CancellationToken cancellationToken);
     }
 }

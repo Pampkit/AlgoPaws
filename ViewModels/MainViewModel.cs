@@ -56,16 +56,30 @@ namespace AlgoPaws.ViewModels
             }
         }
 
-        public async Task RunSort(string algName)
+        public async Task RunSort(string algName, string speed)
         {
             _cancellationTokenSource?.Cancel();
             _cancellationTokenSource = new CancellationTokenSource();
 
             if (_algorithms.TryGetValue(algName, out var algorithm))
             {
+                int speedNum = 1;
+                switch (speed)
+                {
+                    case "1x":
+                        speedNum = 1;
+                        break;
+                    case "2x":
+                        speedNum = 2;
+                        break;
+                    case "3x":
+                        speedNum = 3;
+                        break;
+                }
+
                 try
                 {
-                    await algorithm.Sort(Items, _cancellationTokenSource.Token);
+                    await algorithm.Sort(Items, speedNum, _cancellationTokenSource.Token);
                 }
                 catch (OperationCanceledException)
                 {

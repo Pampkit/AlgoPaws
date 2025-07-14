@@ -11,16 +11,24 @@ namespace AlgoPaws.Views
 
         private String comboBoxState = "Bubble Sort";
         private bool startState = false;
+        private String speedState = "1x";
 
         public MainWindow()
         {
             InitializeComponent();
             viewModel = new MainViewModel(VisualizationCanvas);
             viewModel.GenerateArray();
+
             ComboBox.Items.Add("Bubble Sort");
             ComboBox.Items.Add("Quick Sort");
             ComboBox.SelectedIndex = 0;
             ComboBox.SelectionChanged += onComboBoxSelectionChanged;
+
+            Speed.Items.Add("1x");
+            Speed.Items.Add("2x");
+            Speed.Items.Add("3x");
+            Speed.SelectedIndex = 0;
+            Speed.SelectionChanged += onSpeedSelectionChanged;
         }
 
         private void StartButton_Click(object sender, RoutedEventArgs e)
@@ -28,7 +36,7 @@ namespace AlgoPaws.Views
             if (!startState)
             {
                 StartButton.Content = "Стоп";
-                viewModel.RunSort(comboBoxState);
+                viewModel.RunSort(comboBoxState, speedState);
                 startState = true;
                 GenerateButton.IsEnabled = false;
                 ComboBox.IsEnabled = false;
@@ -52,6 +60,11 @@ namespace AlgoPaws.Views
         private void onComboBoxSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             comboBoxState = ComboBox.SelectedValue?.ToString();
+        }
+
+        private void onSpeedSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            speedState = Speed.SelectedValue?.ToString();
         }
     }
 }
